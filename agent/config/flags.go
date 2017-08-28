@@ -49,6 +49,8 @@ func newBoolPtrValue(p **bool) *boolPtrValue {
 	return &boolPtrValue{p, false}
 }
 
+func (s *boolPtrValue) IsBoolFlag() bool { return true }
+
 func (s *boolPtrValue) Set(val string) error {
 	b, err := strconv.ParseBool(val)
 	if err != nil {
