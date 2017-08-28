@@ -22,6 +22,18 @@ func TestParse(t *testing.T) {
 			def:  defaultFile,
 			cfg:  defaultConfig,
 		},
+
+		// cmd line flags
+		{
+			flags: []string{`-bootstrap`},
+			cfg:   Config{Bootstrap: true},
+		},
+		{
+			flags: []string{`-dc`, `a`},
+			cfg:   Config{Datacenter: "a"},
+		},
+
+		// json cfg file
 		{
 			fmt:   "json",
 			files: []string{`{"bootstrap":true}`},
@@ -32,12 +44,8 @@ func TestParse(t *testing.T) {
 			files: []string{`{"bootstrap":true}`, `{"bootstrap":false}`},
 			cfg:   Config{Bootstrap: false},
 		},
-		{
-			fmt:   "json",
-			files: []string{`{"bootstrap":true}`},
-			flags: []string{`-bootstrap=false`},
-			cfg:   Config{Bootstrap: false},
-		},
+
+		// hcl cfg file
 		{
 			fmt:   "hcl",
 			files: []string{`bootstrap=true`},
@@ -46,6 +54,14 @@ func TestParse(t *testing.T) {
 		{
 			fmt:   "hcl",
 			files: []string{`bootstrap=true`, `bootstrap=false`},
+			cfg:   Config{Bootstrap: false},
+		},
+
+		// precedence rules
+		{
+			fmt:   "json",
+			files: []string{`{"bootstrap":true}`},
+			flags: []string{`-bootstrap=false`},
 			cfg:   Config{Bootstrap: false},
 		},
 		{
