@@ -24,13 +24,6 @@ func (f *Flags) File() File {
 	}
 }
 
-func NewFlagSet(f *Flags) *flag.FlagSet {
-	fs := flag.NewFlagSet("agent", flag.ContinueOnError)
-	fs.Var(newBoolPtrValue(&f.Bootstrap), "bootstrap", "bootstrap yes/no")
-	fs.Var(newStringPtrValue(&f.Datacenter), "dc", "datacenter")
-	return fs
-}
-
 func ParseFlags(args []string) (*Flags, error) {
 	f := &Flags{}
 	fs := NewFlagSet(f)
@@ -38,6 +31,21 @@ func ParseFlags(args []string) (*Flags, error) {
 		return nil, err
 	}
 	return f, nil
+}
+
+func NewFlagSet(f *Flags) *flag.FlagSet {
+	fs := flag.NewFlagSet("agent", flag.ContinueOnError)
+	boolPtrVar(fs, &f.Bootstrap, "bootstrap", "bootstrap yes/no")
+	stringPtrVar(fs, &f.Datacenter, "dc", "datacenter")
+	return fs
+}
+
+func boolPtrVar(fs *flag.FlagSet, p **bool, name string, help string) {
+	fs.Var(newBoolPtrValue(p), name, help)
+}
+
+func stringPtrVar(fs *flag.FlagSet, p **string, name string, help string) {
+	fs.Var(newStringPtrValue(p), name, help)
 }
 
 type boolPtrValue struct {
