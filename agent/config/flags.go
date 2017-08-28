@@ -48,6 +48,7 @@ func stringPtrVar(fs *flag.FlagSet, p **string, name string, help string) {
 	fs.Var(newStringPtrValue(p), name, help)
 }
 
+// boolPtrValue
 type boolPtrValue struct {
 	v **bool
 	b bool
@@ -82,6 +83,7 @@ func (s *boolPtrValue) String() string {
 	return ""
 }
 
+// stringPtrValue
 type stringPtrValue struct {
 	v **string
 	b bool
